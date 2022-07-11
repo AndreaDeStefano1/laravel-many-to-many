@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Post;
+use App\Tag;
 
 class PostController extends Controller
 {
@@ -26,7 +27,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.post.create');
+        $tags = Tag::all();
+
+        return view('admin.post.create',compact('tags'));
     }
 
     /**
@@ -49,6 +52,10 @@ class PostController extends Controller
         $data['slug'] = Post::generateSlug($data['title']);
         $new_post->fill($data);
         $new_post->save();
+
+        if (array_key_exists('tags',$data)) {
+            $new_post->tags()->attach($data['tags']);
+        }
 
         return redirect()->route('admin.posts.show', $new_post);
 
@@ -76,7 +83,8 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        return view('admin.post.edit', compact('post'));
+        $tags = Tag::all();
+        return view('admin.post.edit', compact('post','tags'));
     }
 
     /**
