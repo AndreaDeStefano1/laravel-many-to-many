@@ -14,6 +14,7 @@
             <tr>
                 <th scope="col">#ID</th>
                 <th scope="col">Titolo</th>
+                <th scope="col">Tag</th>
                 <th scope="col">Opzioni</th>
             </tr>
             </thead>
@@ -22,6 +23,14 @@
                     <tr>
                         <td>{{ $post->id }}</td>
                         <td>{{ $post->title }}</td>
+                        {{-- aggiungo i tag qui --}}
+                        <td>
+                            @forelse ($post->tags as $tag)
+                                {{ $tag->name }}
+                            @empty
+                                Nessun tag assegnato
+                            @endforelse
+                        </td>
                         <td>
                             <a class="btn btn-primary" href="{{ route('admin.posts.show', $post) }}">MOSTRA</a>
                             <a class="btn btn-warning" href="{{ route('admin.posts.edit', $post) }}">EDIT</a>
