@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Post extends Model
 {
-    public function posts(){
+    public function tags(){
         return $this->belongsToMany('App\Tag');
     }
 
