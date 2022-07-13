@@ -100,10 +100,19 @@ class PostController extends Controller
                 'title' => 'required | max:50 | min:3',
                 'text' => 'required | min:10'
             ]) ;
-        $data['slug'] = Post::generateSlug($request['title']);
-        $post = Post::find($id);
-        $data = $request->all();
+            $post = Post::find($id);
+            $data = $request->all();
+        if ($data['title'] != $post->title) {
+
+            $data['slug'] = Post::generateSlug($data['title']);
+        }
         $post->update($data);
+
+        if (array_key_exists('tags',$data)) {
+          $post->tags()->sync($data['tags']);
+        }else{
+          $post->tags()->detach([]);
+        }
         return redirect()->route('admin.posts.show', compact('post'));
     }
 
